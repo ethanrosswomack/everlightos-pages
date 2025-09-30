@@ -1,0 +1,29 @@
+{
+  "family": "apm-assistant-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::509951859275:role/apm-assistant-exec-role",
+  "taskRoleArn": "arn:aws:iam::509951859275:role/apm-assistant-task-role",
+  "containerDefinitions": [
+    {
+      "name": "apm-assistant",
+      "image": "509951859275.dkr.ecr.us-east-1.amazonaws.com/apm-assistant:bootstrap",
+      "essential": true,
+      "portMappings": [{ "containerPort": 8080, "protocol": "tcp" }],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/apm-assistant",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "curl -fsS http://localhost:8080/health || exit 1"],
+        "interval": 30, "timeout": 5, "retries": 3, "startPeriod": 30
+      }
+    }
+  ]
+}

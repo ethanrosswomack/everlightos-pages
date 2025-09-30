@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EverLightOS — APM Assistant (Demo)</title>
+  <meta name="description" content="APM Assistant — federated, containerized aide for Amazon RME paperwork.">
+  <link rel="icon" href="/assets/favicon.svg">
+  <style>
+    :root{--bg:#0b0f12;--card:#0f1720;--muted:#98a0ac;--accent:#8bd3ff}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,Arial;background:linear-gradient(180deg,#07101a 0%, #041018 100%);color:#e6eef6}
+    .wrap{max-width:980px;margin:48px auto;padding:28px}
+    header{display:flex;align-items:center;gap:16px}
+    .brand{display:flex;flex-direction:column}
+    h1{margin:0;font-size:28px}
+    p.lead{color:var(--muted);margin:8px 0 20px}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,.6)}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px;margin-top:18px}
+    .cta{display:inline-block;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#6ec8ff);color:#021018;text-decoration:none;font-weight:600}
+    .meta{color:var(--muted);font-size:13px}
+    pre{background:#061018;padding:12px;border-radius:8px;overflow:auto}
+    footer{margin-top:24px;color:var(--muted);font-size:13px}
+    a.link{color:var(--accent);text-decoration:none}
+    .form-display{margin-top:12px;background:#08121a;padding:12px;border-radius:8px;color:#dff6ff}
+    .label{color:var(--muted);font-size:12px}
+    @media(max-width:860px){.grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="/assets/logo.svg" alt="EverLightOS" width="64" height="64">
+      <div class="brand">
+        <h1>EverLightOS — APM Assistant (Demo)</h1>
+        <div class="meta">A federated, containerized aide to reduce APM paperwork for RME teams</div>
+      </div>
+    </header>
+
+    <p class="lead">This is a lightweight, demo-ready landing page for the <strong>APM Assistant</strong>. Click "Load demo" to fetch a sample auto-filled APM form returned by the local mock API server. If the API is not reachable, a fallback sample will display.</p>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h3>Live demo (mock)</h3>
+          <p class="meta">Press the button to request an auto-filled APM form from <code>/apm-assistant/api/auto-fill</code>.</p>
+          <button id="loadBtn" class="cta">Load demo</button>
+          <div id="result" class="form-display" style="display:none;"></div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h3>How it works</h3>
+          <p class="meta">The page attempts to fetch a sample auto-filled form from the APM Assistant container. If deployed together on the same domain or behind a reverse proxy (recommended for live demos), the endpoint will be available at <code>/apm-assistant/api/auto-fill</code>.</p>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <h4>APM Assistant (Files included)</h4>
+          <ul>
+            <li><code>/apm-assistant/Dockerfile</code></li>
+            <li><code>/apm-assistant/app.py</code> (mock API)</li>
+            <li><code>/apm-assistant/docker-compose.yml</code></li>
+            <li><code>/apm-assistant/README.md</code></li>
+          </ul>
+          <h4 style="margin-top:10px">Next steps</h4>
+          <ul>
+            <li>Run container locally: <code>docker-compose up --build</code></li>
+            <li>Deploy container on ECS/Fargate and reverse proxy to <code>/apm-assistant</code></li>
+            <li>Replace mock logic with your BridgeOps code</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4>Contact & provenance</h4>
+          <p class="meta">Created by Ethan (Hawk Eye) — Omniversal Media / EverLightOS</p>
+          <p class="meta">Demo package generated for <strong>awsdev.everlightos.com</strong></p>
+          <a class="cta" href="#apm">Show APM Assistant files</a>
+        </div>
+      </aside>
+    </div>
+
+    <section id="apm" style="margin-top:18px" class="card">
+      <h3>Included — /apm-assistant</h3>
+      <p class="meta">This folder contains a minimal container mock server that returns an auto-filled APM form example.</p>
+      <pre>
+/apm-assistant
+├─ Dockerfile
+├─ docker-compose.yml
+├─ app.py
+├─ README.md
+      </pre>
+      <h4 style="margin-top:12px">DNS / Hosting</h4>
+      <p class="meta">For a live demo, host the static site and the container behind the same domain (reverse proxy) so the JS can call <code>/apm-assistant/api/auto-fill</code> without CORS friction.</p>
+    </section>
+
+    <footer>
+      <div class="meta">Generated: EverLightOS demo • Static preview • Mock API included.</div>
+    </footer>
+  </div>
+
+  <script>
+    const btn = document.getElementById('loadBtn');
+    const res = document.getElementById('result');
+    const endpoint = '/apm-assistant/api/auto-fill';
+    const fallback = {
+      "form_id":"APM-2025-0001",
+      "location":"FC-ATL-01",
+      "asset":"Conveyor-7B",
+      "reported_by":"Ethan W.",
+      "date":"2025-09-30",
+      "fields":{
+        "symptom":"Intermittent belt slip during starting",
+        "severity":"Medium",
+        "last_maintenance":"2025-08-12",
+        "suggested_action":"Inspect tensioner, replace worn idler roller",
+        "estimated_downtime":"1 hour"
+      },
+      "confidence":0.87,
+      "notes":"Auto-filled by EverLightOS APM Assistant (mock)"
+    };
+
+    function renderJSON(obj){
+      return '<pre>' + JSON.stringify(obj, null, 2) + '</pre>';
+    }
+
+    btn.addEventListener('click', async ()=>{
+      res.style.display = 'block';
+      res.innerHTML = '<div class="meta">Requesting demo…</div>';
+      try{
+        const r = await fetch(endpoint);
+        if(!r.ok) throw new Error('Network response not ok');
+        const j = await r.json();
+        res.innerHTML = renderJSON(j);
+      }catch(e){
+        res.innerHTML = '<div class="meta">API not reachable — showing fallback demo</div>' + renderJSON(fallback);
+      }
+    });
+  </script>
+</body>
+</html>

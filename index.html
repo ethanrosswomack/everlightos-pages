@@ -26,6 +26,26 @@
     @media(max-width:860px){.grid{grid-template-columns:1fr;}}
   </style>
 </head>
+<script>
+async function checkApi() {
+  const el = document.getElementById('api-status');
+  try {
+    const res = await fetch('/api/health', { headers: { 'Accept': 'application/json' }});
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    el.textContent = `API OK: ${JSON.stringify(data)}`;
+    el.style.color = 'green';
+  } catch (e) {
+    el.textContent = `API error: ${e.message}`;
+    el.style.color = 'red';
+  }
+}
+window.addEventListener('load', checkApi);
+</script>
+
+<div id="api-status" style="margin:1rem 0; font-family: ui-sans-serif; color: #666;">
+  Checking API…
+</div>
 <body>
   <div class="wrap">
     <header>

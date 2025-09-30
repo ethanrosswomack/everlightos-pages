@@ -62,14 +62,14 @@ window.addEventListener('load', checkApi);
       <div>
         <div class="card">
           <h3>Live demo (mock)</h3>
-          <p class="meta">Press the button to request an auto-filled APM form from <code>/apm-assistant/api/auto-fill</code>.</p>
+          <p class="meta">Press the button to request an auto-filled APM form from <code>/apm-assistant/api/health</code>.</p>
           <button id="loadBtn" class="cta">Load demo</button>
           <div id="result" class="form-display" style="display:none;"></div>
         </div>
 
         <div class="card" style="margin-top:12px">
           <h3>How it works</h3>
-          <p class="meta">The page attempts to fetch a sample auto-filled form from the APM Assistant container. If deployed together on the same domain or behind a reverse proxy (recommended for live demos), the endpoint will be available at <code>/apm-assistant/api/auto-fill</code>.</p>
+          <p class="meta">The page attempts to fetch a sample auto-filled form from the APM Assistant container. If deployed together on the same domain or behind a reverse proxy (recommended for live demos), the endpoint will be available at <code>/apm-assistant/api/health</code>.</p>
         </div>
       </div>
 
@@ -110,7 +110,7 @@ window.addEventListener('load', checkApi);
 ├─ README.md
       </pre>
       <h4 style="margin-top:12px">DNS / Hosting</h4>
-      <p class="meta">For a live demo, host the static site and the container behind the same domain (reverse proxy) so the JS can call <code>/apm-assistant/api/auto-fill</code> without CORS friction.</p>
+      <p class="meta">For a live demo, host the static site and the container behind the same domain (reverse proxy) so the JS can call <code>/apm-assistant/api/health</code> without CORS friction.</p>
     </section>
 
     <footer>
